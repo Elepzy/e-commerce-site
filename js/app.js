@@ -57,6 +57,9 @@ function setupEventListeners() {
 // Toggle cart visibility
 function toggleCart() {
     cartModal.classList.toggle('hidden');
+    if (!cartModal.classList.contains('hidden')) {
+        updateCart(); // Refresh cart contents when showing
+    }
 }
 
 // Toggle checkout visibility
@@ -137,14 +140,14 @@ function handleCheckout(e) {
     e.preventDefault();
     
     // In a real application, you would send this data to a server
-    const formData = new FormData(checkoutForm);
+    const formData = new FormData(e.target);
     const orderData = {
         items: cart,
         total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
         customer: {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            address: formData.get('address')
+            name: e.target.querySelector('input[type="text"]').value,
+            email: e.target.querySelector('input[type="email"]').value,
+            address: e.target.querySelector('textarea').value
         }
     };
 
